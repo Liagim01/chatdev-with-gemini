@@ -1,4 +1,0 @@
-# This file specifies the minimum version of Python required for the game.
-# No external Python packages are required as the game uses the standard library.
-
-python>=3.6

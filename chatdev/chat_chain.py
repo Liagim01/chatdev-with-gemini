@@ -28,7 +28,7 @@ class ChatChain:
                  task_prompt: str = None,
                  project_name: str = None,
                  org_name: str = None,
-                 model_types: ModelType = [ModelType.GPT_3_5_TURBO,ModelType.GEMINI_PRO,ModelType.GPT_4],
+                 model_type: ModelType = ModelType.GPT_3_5_TURBO,
                  code_path: str = None) -> None:
         """
 
@@ -47,7 +47,7 @@ class ChatChain:
         self.config_role_path = config_role_path
         self.project_name = project_name
         self.org_name = org_name
-        self.model_types = [ModelType.GPT_3_5_TURBO,ModelType.GEMINI_PRO,ModelType.GPT_4]
+        self.model_type = model_type
         self.code_path = code_path
 
         with open(self.config_path, 'r', encoding="utf8") as file:
@@ -103,7 +103,7 @@ class ChatChain:
                                          phase_prompt=phase_prompt,
                                          role_prompts=self.role_prompts,
                                          phase_name=phase,
-                                         model_types=self.model_types,
+                                         model_type=self.model_type,
                                          log_filepath=self.log_filepath)
             self.phases[phase] = phase_instance
 
@@ -150,7 +150,7 @@ class ChatChain:
                                                          composition=composition,
                                                          config_phase=self.config_phase,
                                                          config_role=self.config_role,
-                                                         model_types=self.model_types,
+                                                         model_type=self.model_type,
                                                          log_filepath=self.log_filepath)
             self.chat_env = compose_phase_instance.execute(self.chat_env)
         else:
@@ -344,7 +344,7 @@ then you should return a message in a format like \"<INFO> revised_version_of_th
             task_type=TaskType.CHATDEV,
             task_prompt="Do prompt engineering on user query",
             with_task_specify=False,
-            model_types=self.model_types,
+            model_type=self.model_type,
         )
 
         # log_visualize("System", role_play_session.assistant_sys_msg)
