@@ -18,7 +18,7 @@ class Phase(ABC):
                  phase_prompt,
                  role_prompts,
                  phase_name,
-                 model_type,
+                 model_types,
                  log_filepath):
         """
 
@@ -41,7 +41,7 @@ class Phase(ABC):
         self.counselor_prompt = role_prompts["Counselor"]
         self.max_retries = 3
         self.reflection_prompt = """Here is a conversation between two roles: {conversations} {question}"""
-        self.model_type = model_type
+        self.model_types = model_types
         self.log_filepath = log_filepath
 
     @log_arguments
@@ -58,7 +58,7 @@ class Phase(ABC):
             task_type=TaskType.CHATDEV,
             need_reflect=False,
             with_task_specify=False,
-            model_type=ModelType.GPT_3_5_TURBO,
+            model_types=[ModelType.GPT_3_5_TURBO,ModelType.GEMINI_PRO,ModelType.GPT_4],
             placeholders=None,
             chat_turn_limit=10
     ) -> str:
@@ -102,7 +102,7 @@ class Phase(ABC):
             task_prompt=task_prompt,
             task_type=task_type,
             with_task_specify=with_task_specify,
-            model_type=model_type,
+            model_types=model_types,
             background_prompt=chat_env.config.background_prompt
         )
 
@@ -128,7 +128,7 @@ class Phase(ABC):
             # 4. then input_assistant_msg send to LLM and get user_response
             # all above are done in role_play_session.step, which contains two interactions with LLM
             # the first interaction is logged in role_play_session.init_chat
-            assistant_response, user_response = role_play_session.step(input_user_msg, chat_turn_limit == 1)
+            assistant_response, user_response = role_play_session.step(input_user_msg, chat_turn_limit == 1, turn=i)
 
             conversation_meta = "**" + assistant_role_name + "<->" + user_role_name + " on : " + str(
                 phase_name) + ", turn " + str(i) + "**\n\n"
@@ -228,7 +228,7 @@ class Phase(ABC):
                           placeholders={"conversations": messages, "question": question},
                           need_reflect=False,
                           chat_turn_limit=1,
-                          model_type=self.model_type)
+                          model_types=self.model_types)
 
         if "recruiting" in phase_name:
             if "Yes".lower() in reflected_content.lower():
@@ -300,7 +300,7 @@ class Phase(ABC):
                           user_role_prompt=self.user_role_prompt,
                           chat_turn_limit=chat_turn_limit,
                           placeholders=self.phase_env,
-                          model_type=self.model_type)
+                          model_types=self.model_types)
         chat_env = self.update_chat_env(chat_env)
         return chat_env
 
@@ -529,7 +529,7 @@ class CodeReviewHuman(Phase):
                           user_role_prompt=self.user_role_prompt,
                           chat_turn_limit=chat_turn_limit,
                           placeholders=self.phase_env,
-                          model_type=self.model_type)
+                          model_types=self.model_types)
         chat_env = self.update_chat_env(chat_env)
         return chat_env
 

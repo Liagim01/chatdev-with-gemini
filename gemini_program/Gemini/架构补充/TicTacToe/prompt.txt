@@ -1,0 +1,47 @@
+Design a tic-tac-toe game with a user-friendly interface, allowing two players to take turns and determining the winner.
+You need to fill the empty functions:
+
+#main.py
+'''
+This is the main file of the tic-tac-toe game. It handles the game flow, user input, and GUI.
+'''
+import tkinter as tk
+from tkinter import messagebox
+from game import Game
+class TicTacToeGUI:
+    def __init__(self, master):
+        self.master = master
+        self.master.title("Tic-Tac-Toe")
+        self.game = Game()
+        self.buttons = []
+        self.create_board()
+    def create_board(self):
+
+    def button_click(self, row, col):
+
+    def show_winner(self):
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    gui = TicTacToeGUI(root)
+    root.mainloop()
+
+
+
+#game.py
+'''
+This file contains the Game class that represents the tic-tac-toe game logic.
+'''
+class Game:
+    def __init__(self):
+        self.board = [['' for _ in range(3)] for _ in range(3)]
+        self.current_player = 'X'
+    def make_move(self, row, col):
+
+    def is_game_over(self):
+
+    def is_winner(self, player):
+
+    def is_board_full(self):
+
+    def get_winner(self):

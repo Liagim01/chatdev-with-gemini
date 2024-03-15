@@ -1,0 +1,1 @@
+# No external dependencies are required for this project as it only uses the Python standard library's tkinter module.

@@ -1,0 +1,25 @@
+Develop a virtual painting studio app. Provide canvas, brushes, and a variety of colors for users to create digital artworks.
+You need to fill the empty functions:
+'''
+Virtual Painting Studio App
+'''
+import tkinter as tk
+from tkinter import Canvas, Frame
+class App(tk.Tk):
+    def __init__(self):
+
+class Canvas(tk.Canvas):
+    def __init__(self, master):
+
+class Toolbar(Frame):
+    def __init__(self, master):
+        super().__init__(master)
+
+    def get_brush_size(self):
+
+    def get_brush_color(self):
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+

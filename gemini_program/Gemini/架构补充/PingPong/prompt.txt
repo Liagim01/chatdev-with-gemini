@@ -1,0 +1,81 @@
+design a pingpong game
+You need to fill the function:
+
+#main.py
+'''
+This is the main file that runs the pingpong game.
+'''
+import pygame
+from game import Game
+def main():
+    pygame.init()
+    game = Game()
+    game.run()
+if __name__ == "__main__":
+    main()
+
+#game
+'''
+This file contains the Game class that manages the game logic and user interface.
+'''
+import pygame
+from paddle import Paddle
+from ball import Ball
+class Game:
+    def __init__(self):
+        self.width = 800
+        self.height = 400
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        pygame.display.set_caption("PingPong Game")
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.paddle1 = Paddle(20, self.height // 2)
+        self.paddle2 = Paddle(self.width - 20, self.height // 2)
+        self.ball = Ball(self.width // 2, self.height // 2)
+        self.score1 = 0
+        self.score2 = 0
+        self.font = pygame.font.Font(None, 36)
+    def handle_events(self):
+
+    def update(self):
+      
+    def draw(self):
+     
+    def run(self):
+        
+    def game_over(self):
+
+
+#ball.py
+'''
+This file contains the Ball class that represents the game ball.
+'''
+import pygame
+import random
+class Ball:
+    def __init__(self, x, y):
+
+    def update(self, paddle1, paddle2):
+
+    def draw(self, screen):
+
+    def reset(self):
+
+
+#paddle.py:
+
+ '''
+This file contains the Paddle class that represents a player's paddle.
+'''
+import pygame
+class Paddle:
+    def __init__(self, x, y):
+
+    def move_up(self):
+
+    def move_down(self):
+
+    def update(self):
+
+    def draw(self, screen):
+

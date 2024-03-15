@@ -1,0 +1,65 @@
+Help me design a tool. I input an article. You can help me find a suitable picture from the internet for this article from the Internet, and assign the picture to a suitable position in the article. At the same time, make a markdown based layout for the article as a whole, making the article look like a professional official account article
+You need to fill the empty function:
+'''
+This is the main file that will run our application.
+'''
+from flask import Flask, render_template, request
+from article_processor import ArticleProcessor
+app = Flask(__name__)
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        article = request.form['article']
+        processor = ArticleProcessor(article)
+        markdown = processor.process_article()
+        return render_template('result.html', markdown=markdown)
+    return render_template('index.html')
+if __name__ == "__main__":
+    try:
+        app.run(debug=True)
+    except ImportError:
+        print("Error: The watchdog library is not installed. Please install it by running 'pip install watchdog' in your terminal.")
+
+'''
+This file contains the ArticleProcessor class which is responsible for processing the article.
+'''
+from markdown_maker import MarkdownMaker
+from image_finder import ImageFinder
+class ArticleProcessor:
+    def __init__(self, article):
+        self.article = article
+    def process_article(self):
+
+
+'''
+This file contains the MarkdownMaker class which is responsible for creating the markdown.
+'''
+import markdown
+class MarkdownMaker:
+    def __init__(self, article, image_url):
+        self.article = article
+        self.image_url = image_url
+    def create_markdown(self):
+
+
+'''
+This file contains the ImageFinder class which is responsible for finding an image related to the article.
+'''
+import requests
+from bs4 import BeautifulSoup
+class ImageFinder:
+    def __init__(self, article):
+        self.article = article
+    def find_image(self):
+        # Here we use a simple method to find an image: we search for the article title on Google Images and return the first result.
+        # In a real application, you would want to use a more sophisticated method, such as a machine learning model trained to find relevant images.
+        query = self.article.split(' ')[0]  # Use the first word of the article as the query
+        url = f"https://www.google.com/search?q={query}&tbm=isch"
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        image_url = soup.find('img')['src']
+        return image_url
+
+
+
+

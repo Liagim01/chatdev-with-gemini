@@ -80,7 +80,7 @@ class RolePlaying:
             with_task_planner: bool = False,
             with_critic_in_the_loop: bool = False,
             critic_criteria: Optional[str] = None,
-            model_type: ModelType = ModelType.GPT_3_5_TURBO,
+            model_types: List[ModelType] = [ModelType.GPT_3_5_TURBO,ModelType.GEMINI_PRO,ModelType.GPT_4],
             task_type: TaskType = TaskType.AI_SOCIETY,
             assistant_agent_kwargs: Optional[Dict] = None,
             user_agent_kwargs: Optional[Dict] = None,
@@ -90,13 +90,15 @@ class RolePlaying:
             sys_msg_generator_kwargs: Optional[Dict] = None,
             extend_sys_msg_meta_dicts: Optional[List[Dict]] = None,
             extend_task_specify_meta_dict: Optional[Dict] = None,
-            background_prompt: Optional[str] = ""
+            background_prompt: Optional[str] = "",
     ) -> None:
         self.with_task_specify = with_task_specify
         self.with_task_planner = with_task_planner
         self.with_critic_in_the_loop = with_critic_in_the_loop
-        self.model_type = model_type
+        self.model_types = model_types
         self.task_type = task_type
+        self.user_role_name=user_role_name
+        self.assistant_role_name=assistant_role_name
 
         if with_task_specify:
             task_specify_meta_dict = dict()
@@ -108,7 +110,7 @@ class RolePlaying:
                 task_specify_meta_dict.update(extend_task_specify_meta_dict)
 
             task_specify_agent = TaskSpecifyAgent(
-                self.model_type,
+                self.model_types[0],
                 task_type=self.task_type,
                 **(task_specify_agent_kwargs or {}),
             )
@@ -122,7 +124,7 @@ class RolePlaying:
 
         if with_task_planner:
             task_planner_agent = TaskPlannerAgent(
-                self.model_type,
+                self.model_types[0],
                 **(task_planner_agent_kwargs or {}),
             )
             self.planned_task_prompt = task_planner_agent.step(task_prompt)
@@ -148,9 +150,9 @@ class RolePlaying:
                                           meta_dict=sys_msg_meta_dicts[1],
                                           content=user_role_prompt.format(**sys_msg_meta_dicts[1]))
 
-        self.assistant_agent: ChatAgent = ChatAgent(self.assistant_sys_msg, model_type,
+        self.assistant_agent: ChatAgent = ChatAgent(self.assistant_sys_msg, model_types[0],
                                                     **(assistant_agent_kwargs or {}), )
-        self.user_agent: ChatAgent = ChatAgent(self.user_sys_msg, model_type, **(user_agent_kwargs or {}), )
+        self.user_agent: ChatAgent = ChatAgent(self.user_sys_msg, model_types[1], **(user_agent_kwargs or {}), )
 
         if with_critic_in_the_loop:
             raise ValueError("with_critic_in_the_loop not available")
@@ -233,8 +235,26 @@ class RolePlaying:
             self,
             user_msg: ChatMessage,
             assistant_only: bool,
+            turn=0
     ) -> Tuple[ChatAgentResponse, ChatAgentResponse]:
         assert isinstance(user_msg, ChatMessage), print("broken user_msg: " + str(user_msg))
+
+        model_turn=(turn+1)%len(self.model_types)
+
+        if model_turn==len(self.model_types)-1:
+            assistant_model_type=self.model_types[-1]
+            user_model_type=self.model_types[0]
+        else:
+            assistant_model_type=self.model_types[model_turn]
+            user_model_type=self.model_types[model_turn+1]
+
+        self.assistant_agent.update_model_type(assistant_model_type)
+        self.user_agent.update_model_type(user_model_type)
+
+        print('-------')
+        print(self.user_role_name+':'+str(user_model_type))
+        print(self.assistant_role_name+':'+str(assistant_model_type))
+        print('-------')
 
         # print("assistant...")
         user_msg_rst = user_msg.set_user_role_at_backend()

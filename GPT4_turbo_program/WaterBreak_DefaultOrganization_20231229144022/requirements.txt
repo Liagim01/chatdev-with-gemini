@@ -1,0 +1,4 @@
+# No external packages are required as the application uses only the Python Standard Library.
+# However, the Python version should be 3.6 or higher due to the use of f-strings.
+
+python_version >= 3.6

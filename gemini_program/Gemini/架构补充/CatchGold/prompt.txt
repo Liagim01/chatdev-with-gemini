@@ -1,0 +1,171 @@
+你是一个前端开发工程师，呈现一款引人入胜的移动HTML页面，包含一个交互式游戏，其中硬币从屏幕顶部下降到底部。底部有一个可控的容器，用户可以左右移动以捕获下落的硬币。硬币分为1分、10分和100分的面额。游戏有时间限制，持续15秒后结束，显示用户的得分。这款吸引人的游戏是使用HTML、JavaScript和CSS技术制作的，输出的结果必须包含一个html页面。 
+
+You need to fill in the functions in the script.js file
+
+#index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coin Catcher Game</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="gameOverScreen">
+        <h1>Game Over</h1>
+        <p id="finalScore"></p>
+        <button id="restartButton">Restart</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+#style.css
+#gameCanvas {
+    border: 1px solid black;
+}
+#gameOverScreen {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+#gameOverScreen h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+#gameOverScreen p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+#gameOverScreen button {
+    font-size: 18px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#script.js
+// Game Constants
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 600;
+const CONTAINER_WIDTH = 100;
+const CONTAINER_HEIGHT = 20;
+const COIN_RADIUS = 10;
+const COIN_SPEED = 3;
+const COIN_VALUES = [1, 10, 100];
+const GAME_DURATION = 15; // in seconds
+// Game Variables
+let canvas, ctx;
+let containerX, containerY;
+let coins = [];
+let score = 0;
+let gameStarted = false;
+let gameTimer;
+let gameOverScreen;
+let finalScoreElement;
+let restartButton;
+let countdownElement;
+let countdownTimer;
+// Initialize the game
+function init() {
+    canvas = document.getElementById("gameCanvas");
+    ctx = canvas.getContext("2d");
+    canvas.width = CANVAS_WIDTH;
+    canvas.height = CANVAS_HEIGHT;
+    containerX = CANVAS_WIDTH / 2 - CONTAINER_WIDTH / 2;
+    containerY = CANVAS_HEIGHT - CONTAINER_HEIGHT;
+    gameOverScreen = document.getElementById("gameOverScreen");
+    finalScoreElement = document.getElementById("finalScore");
+    restartButton = document.getElementById("restartButton");
+    countdownElement = document.createElement("div");
+    countdownElement.id = "countdown";
+    document.body.appendChild(countdownElement);
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+    restartButton.addEventListener("click", restartGame);
+    startGame();
+}
+// Start the game
+function startGame() {
+    gameStarted = true;
+    score = 0;
+    coins = [];
+    countdownTimer = GAME_DURATION;
+    gameTimer = setInterval(updateGame, 1000 / 60); // 60 FPS
+    countdownElement.innerText = countdownTimer;
+    setTimeout(endGame, GAME_DURATION * 1000);
+}
+// End the game
+function endGame() {
+    gameStarted = false;
+    clearInterval(gameTimer);
+    canvas.style.display = "none";
+    gameOverScreen.style.display = "block";
+    finalScoreElement.innerText = "Final Score: " + score;
+}
+// Restart the game
+function restartGame() {
+    canvas.style.display = "block";
+    gameOverScreen.style.display = "none";
+    init();
+}
+// Update the game state
+function updateGame() {
+    clearCanvas();
+    updateContainer();
+    updateCoins();
+    renderContainer();
+    renderCoins();
+    renderScore();
+    updateCountdown();
+}
+// Clear the canvas
+function clearCanvas() {
+    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+}
+// Update the container position based on user input
+function updateContainer() {
+
+}
+// Update the coin positions and check for collisions
+function updateCoins() {
+
+    
+}
+// Render the container
+function renderContainer() {
+    ctx.fillStyle = "blue";
+    ctx.fillRect(containerX, containerY, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+}
+// Render the coins
+function renderCoins() {
+
+}
+// Render the score
+function renderScore() {
+
+}
+// Update the countdown timer
+function updateCountdown() {
+
+}
+// Handle keydown events
+let leftKeyPressed = false;
+let rightKeyPressed = false;
+function handleKeyDown(event) {
+
+}
+// Handle keyup events
+function handleKeyUp(event) {
+
+}
+// Start the game when the page is loaded
+window.onload = init;

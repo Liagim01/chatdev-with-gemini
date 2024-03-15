@@ -161,6 +161,11 @@ class ChatAgent(BaseAgent):
         """
         self.stored_messages.append(message)
         return self.stored_messages
+    
+    def update_model_type(self, model_type):
+        self.model=model_type
+        self.model_config = GeminiConfig() if self.model in {ModelType.GEMINI_PRO} else ChatGPTConfig()
+        self.model_backend=ModelFactory.create(self.model, self.model_config.__dict__)
 
     @retry(wait=wait_exponential(min=5, max=60), stop=stop_after_attempt(5))
     @openai_api_key_required

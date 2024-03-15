@@ -106,7 +106,7 @@ chat_chain = ChatChain(config_path=config_path,
                        task_prompt=args.task,
                        project_name=args.name,
                        org_name=args.org,
-                       model_type=args2type[args.model],
+                       model_types=[ModelType.GPT_3_5_TURBO,ModelType.GEMINI_PRO,ModelType.GPT_4],
                        code_path=args.path)
 
 # ----------------------------------------
